@@ -15,13 +15,18 @@ class StockManager {
     }
 
     public void displayStock() {
-        System.out.println("Stock:");
+        System.out.println("-------------------------------------------------");
+        System.out.printf("| %-20s | %-10s | %-8s |\n", "Name", "Price", "Quantity");
+        System.out.println("-------------------------------------------------");
+    
         for (Product product : products) {
-            System.out.println("Name: " + product.getName() +
-                    ", Price: " + product.getPrice() +
-                    ", Quantity: " + product.getQuantity());
+            System.out.printf("| %-20s | %-10.2f | %-8d |\n", product.getName(), product.getPrice(), product.getQuantity());
+            
         }
+    
+        System.out.println("-------------------------------------------------");
     }
+    
 
     private Product findProduct(String name) {
         for (Product product : products) {
@@ -32,7 +37,22 @@ class StockManager {
         return null;
     }
 
-      public boolean updateStock(String name) {
+    public class ItemNotFoundException extends Exception {
+        public ItemNotFoundException(String itemName) {
+            super("Item not found: " + itemName);
+           
+        }
+    }
+
+    public class NotEnoughItemsForSaleException extends Exception {
+        public NotEnoughItemsForSaleException(String itemName, int availableQuantity, int requestedQuantity) {
+            super("\n"+"Not enough items for sale." + "\n"+" Item: " + itemName + ", Available Quantity: " + availableQuantity + ", Requested Quantity: " + requestedQuantity);
+        }
+    }
+    
+    
+
+      public boolean updateStock(String name) throws StockManager.ItemNotFoundException,NotEnoughItemsForSaleException {
     
         Product product = findProduct(name);
         Scanner scanner = new Scanner(System.in);
@@ -62,17 +82,14 @@ class StockManager {
                 System.out.println("Stock updated successfully.");
                 return true;
             } else {
-                System.out.println("Invalid quantity. Please enter a valid quantity.");
-                return false;
+               throw new NotEnoughItemsForSaleException(name,product.getQuantity(),(product.getQuantity() - quantity));
             }   
         
         }
         else{
+            throw new ItemNotFoundException(name.toString());
            
-            System.out.println("Product not found.");
-            System.out.println("Please Add the product in Stock first");
-            return false;       
-        }
+                        }
         
  }
 

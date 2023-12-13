@@ -61,7 +61,7 @@ public class Stock {
     }
 
     public static void main(String[] args) {
-        
+
         StockManager stockManager = new StockManager();
 
         Scanner scanner = new Scanner(System.in);
@@ -77,6 +77,10 @@ public class Stock {
 
             int choice = scanner.nextInt();
 
+       
+
+            
+
             switch (choice) {
                 case 1:
                     System.out.print("Enter product name: ");
@@ -91,7 +95,11 @@ public class Stock {
                     stockManager.displayStock();
                     System.out.print("Enter product name to update stock: ");
                     String productName = scanner.next();
-                    stockManager.updateStock(productName);
+                    try {
+                        stockManager.updateStock(productName);
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case 3:
                     stockManager.displayStock();
@@ -103,9 +111,12 @@ public class Stock {
                 default:
                     System.out.println("Invalid choice. Please enter a valid option.");
             }
+        }
 
         }
 
     }
 
-}
+
+
+// add expectiom
